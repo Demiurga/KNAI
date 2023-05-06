@@ -1,18 +1,31 @@
 import openai
+import textract
 
-openai.api_key = "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"
+file_name = "dsf.docx"
+encoding = "utf-8"
+data = ''
+text = textract.process(file_name).decode(encoding)
+openai.api_key = "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"
 model_engine = "text-davinci-003"
+option = ''
 
 
-def request(data):
+def request(data, tokens):
+    global option
+    if option != '':
+        option = 'В стиле ' + option
     completion = openai.Completion.create(
         engine=model_engine,
-        prompt=data.prompt,
-        max_tokens=data.max_tokens,
-        temperature=data.temperature,
+        prompt='Привет, можешь, пожалуйста, выделить самое главное в этом тексте : ' + data + '.' + option,
+        max_tokens=tokens,  # по сути, от 256 до 4096
+        temperature=0.5,
         top_p=1,
-        frequency_penalty=data.frequency_penalty,
-        presence_penalty=data.presence_penalty
+        frequency_penalty=0,
+        presence_penalty=0
     )
 
     return completion.choices[0].text
+
+
+data = text
+print(request(data, tokens=2048))
