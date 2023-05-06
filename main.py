@@ -19,5 +19,4 @@ class Client(QMainWindow):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.
     sys.exit(app.exec_())
